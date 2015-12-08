@@ -10,36 +10,11 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 public class MainActivity extends AppCompatActivity {
-    private GotAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ListView characetersList = (ListView) findViewById(R.id.list);
-        adapter = new GotAdapter(this);
-        characetersList.setAdapter(adapter);
-        characetersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                GoTCharacter gotCharacter = adapter.getItem(position);
-                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-                intent.putExtra(DetailActivity.CHARACTER, gotCharacter);
-                startActivity(intent);
-            }
-        });
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        adapter.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        adapter.onStop();
     }
 
     @Override

@@ -25,6 +25,17 @@ public class DetailActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         GoTCharacter character = extras.getParcelable(CHARACTER);
+
+        DetailFragment detailFragment = new DetailFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(CHARACTER, character);
+        detailFragment.setArguments(args);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container_detail, detailFragment)
+                .commit();
+
         setTitle(character.name);
 
         TextView characterName = (TextView) findViewById(R.id.text_character_name);
