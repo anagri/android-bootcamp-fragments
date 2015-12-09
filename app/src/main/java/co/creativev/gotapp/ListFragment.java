@@ -11,37 +11,32 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 public class ListFragment extends Fragment {
-    private GotAdapter adapter;
+//    private GotAdapter adapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         ListView characetersList = (ListView) view.findViewById(R.id.list);
-        adapter = new GotAdapter(getContext());
+//        adapter = new GotAdapter(getContext());
+//        characetersList.setAdapter(adapter);
+        final GoTOnlineAdapter adapter = new GoTOnlineAdapter(getContext());
         characetersList.setAdapter(adapter);
         characetersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                GoTCharacter gotCharacter = adapter.getItem(position);
-                Intent intent = new Intent(getContext(), DetailActivity.class);
-                intent.putExtra(DetailActivity.CHARACTER, gotCharacter);
-                startActivity(intent);
+                if (adapter.getItemViewType(position) == 1) {
+                    adapter.loadMore();
+                } else {
+                    GoTCharacter gotCharacter = adapter.getItem(position);
+                    Intent intent = new Intent(getContext(), DetailActivity.class);
+                    intent.putExtra(DetailActivity.CHARACTER, gotCharacter);
+                    startActivity(intent);
+                }
             }
         });
 
         return view;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        adapter.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        adapter.onStop();
-    }
 }
