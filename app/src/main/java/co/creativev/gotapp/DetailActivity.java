@@ -4,10 +4,6 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
 
 public class DetailActivity extends AppCompatActivity {
     public static final String CHARACTER = "character";
@@ -37,22 +33,6 @@ public class DetailActivity extends AppCompatActivity {
                 .commit();
 
         setTitle(character.name);
-
-        TextView characterName = (TextView) findViewById(R.id.text_character_name);
-        ImageView characterImage = (ImageView) findViewById(R.id.image_character);
-        ImageView houseThumb = (ImageView) findViewById(R.id.image_house);
-        TextView description = (TextView) findViewById(R.id.text_description);
-        TextView houseName = (TextView) findViewById(R.id.text_house_name);
-
-        characterName.setText(character.name);
-        description.setText(character.description);
-        houseName.setText(character.house);
-        Picasso.with(this)
-                .load(character.fullUrl)
-                .placeholder(R.drawable.profile_placeholder_full)
-                .error(R.drawable.profile_placeholder_error_full)
-                .into(characterImage);
-        houseThumb.setImageResource(character.houseResId);
     }
 
     @Override
