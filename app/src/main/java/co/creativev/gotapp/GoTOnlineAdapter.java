@@ -1,6 +1,7 @@
 package co.creativev.gotapp;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,11 +9,17 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -24,6 +31,7 @@ public class GoTOnlineAdapter extends BaseAdapter {
     private final List<GoTCharacter> characters;
     private final LayoutInflater inflater;
     private final Context context;
+    private int page = 0;
 
     public GoTOnlineAdapter(Context context) {
         this.context = context;
@@ -108,8 +116,32 @@ public class GoTOnlineAdapter extends BaseAdapter {
     }
 
     public void loadMore() {
-        characters.add(DatabaseHelper.GOT_CHARACTERS[getCount() - 1]);
-        notifyDataSetChanged();
+        new AsyncTask<Integer, Void, GoTCharacter>() {
+            @Override
+            protected GoTCharacter doInBackground(Integer... params) {
+                Request request = new Request.Builder()
+                        .url("http://10.10.0.59:3000/got_characters/" + (params[0] + 1) + ".json")
+                        .get()
+                        .build();
+                try {
+                    Response response = okHttpClient.newCall(request).execute();
+                    Gson gson = new GsonBuilder()
+                            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                            .create();
+                    return gson.fromJson(response.body().string(), GoTCharacter.class);
+                } catch (IOException e) {
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(GoTCharacter goTCharacter) {
+                super.onPostExecute(goTCharacter);
+                characters.add(goTCharacter);
+                page++;
+                notifyDataSetChanged();
+            }
+        }.execute(page);
     }
 
     public static class ViewHolder {
@@ -121,4 +153,5 @@ public class GoTOnlineAdapter extends BaseAdapter {
             this.textView = textView;
         }
     }
+
 }
