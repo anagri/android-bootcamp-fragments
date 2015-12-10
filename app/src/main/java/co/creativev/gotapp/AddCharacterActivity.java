@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
@@ -88,15 +89,27 @@ public class AddCharacterActivity extends AppCompatActivity {
                 int houseResId = getHouseResId(selectedHouse);
                 String houseName = getHouseName(selectedHouse);
                 DatabaseHelper databaseHelper = DatabaseHelper.getInstance(AddCharacterActivity.this);
-                GoTCharacter goTCharacter = new GoTCharacter(name, imagePath, imagePath, true, houseName, houseResId, "Created by Add Activity");
-                long id = databaseHelper.insert(goTCharacter);
-                if (id == -1) {
-                    Log.e(GoTApplication.LOG_TAG, "Error while inserting data");
-                    Toast.makeText(AddCharacterActivity.this, "Error while inserting new character", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(AddCharacterActivity.this, "Inserted new character", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
+                final GoTCharacter goTCharacter = new GoTCharacter(name, imagePath, imagePath, true, houseName, houseResId, "Created by Add Activity");
+
+//                long id = databaseHelper.insert(goTCharacter);
+                final GoTService goTService = ((GoTApplication) getApplication()).getGoTService();
+                new AsyncTask<GoTCharacter, Void, GoTCharacter>() {
+                    @Override
+                    protected GoTCharacter doInBackground(GoTCharacter... params) {
+                        return goTService.newCharacter(goTCharacter);
+                    }
+
+                    @Override
+                    protected void onPostExecute(GoTCharacter goTCharacter) {
+                        if (goTCharacter == null) {
+                            Log.e(GoTApplication.LOG_TAG, "Error while inserting data");
+                            Toast.makeText(AddCharacterActivity.this, "Error while inserting new character", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(AddCharacterActivity.this, "Inserted new character", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                    }
+                }.execute(goTCharacter);
             }
         });
     }

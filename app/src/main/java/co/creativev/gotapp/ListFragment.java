@@ -20,7 +20,8 @@ public class ListFragment extends Fragment {
         ListView characetersList = (ListView) view.findViewById(R.id.list);
 //        adapter = new GotAdapter(getContext());
 //        characetersList.setAdapter(adapter);
-        final GoTOnlineAdapter adapter = new GoTOnlineAdapter(getContext());
+        GoTService goTService = ((GoTApplication) getActivity().getApplication()).getGoTService();
+        final GoTOnlineAdapter adapter = new GoTOnlineAdapter(getContext(), goTService);
         characetersList.setAdapter(adapter);
         characetersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
