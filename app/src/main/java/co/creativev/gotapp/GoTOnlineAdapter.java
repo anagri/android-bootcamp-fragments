@@ -130,16 +130,15 @@ public class GoTOnlineAdapter extends BaseAdapter {
     }
 
     public void loadMore() {
-        new AsyncTask<Integer, Void, GoTCharacter>() {
+        new AsyncTask<Integer, Void, List<GoTCharacter>>() {
             @Override
-            protected GoTCharacter doInBackground(Integer... params) {
-                return goTService.getCharacter(params[0]);
+            protected List<GoTCharacter> doInBackground(Integer... params) {
+                return goTService.getCharacters(params[0]);
             }
 
             @Override
-            protected void onPostExecute(GoTCharacter goTCharacter) {
-                super.onPostExecute(goTCharacter);
-                characters.add(goTCharacter);
+            protected void onPostExecute(List<GoTCharacter> goTCharacter) {
+                characters.addAll(goTCharacter);
                 page++;
                 notifyDataSetChanged();
             }
