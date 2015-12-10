@@ -14,15 +14,16 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import retrofit.RestAdapter;
+import retrofit.client.OkClient;
+import retrofit.converter.GsonConverter;
 
 public class GoTOnlineAdapter extends BaseAdapter {
     public static final long HTTP_TIMEOUT = 10 * 1000;
@@ -31,6 +32,7 @@ public class GoTOnlineAdapter extends BaseAdapter {
     private final List<GoTCharacter> characters;
     private final LayoutInflater inflater;
     private final Context context;
+    private final GoTService goTService;
     private int page = 0;
 
     public GoTOnlineAdapter(Context context) {
@@ -42,6 +44,18 @@ public class GoTOnlineAdapter extends BaseAdapter {
         File cacheDir = new File(context.getCacheDir(), "http-cache");
         Cache cache = new Cache(cacheDir, CACHE_SIZE);
         okHttpClient.setCache(cache);
+
+        Gson gson = new GsonBuilder()
+                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                .create();
+
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setClient(new OkClient(okHttpClient))
+                .setEndpoint("http://10.10.0.59:3000/")
+                .setLogLevel(RestAdapter.LogLevel.FULL)
+                .setConverter(new GsonConverter(gson))
+                .build();
+        goTService = restAdapter.create(GoTService.class);
 
         characters = new ArrayList<>();
         inflater = LayoutInflater.from(context);
@@ -119,19 +133,7 @@ public class GoTOnlineAdapter extends BaseAdapter {
         new AsyncTask<Integer, Void, GoTCharacter>() {
             @Override
             protected GoTCharacter doInBackground(Integer... params) {
-                Request request = new Request.Builder()
-                        .url("http://10.10.0.59:3000/got_characters/" + (params[0] + 1) + ".json")
-                        .get()
-                        .build();
-                try {
-                    Response response = okHttpClient.newCall(request).execute();
-                    Gson gson = new GsonBuilder()
-                            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-                            .create();
-                    return gson.fromJson(response.body().string(), GoTCharacter.class);
-                } catch (IOException e) {
-                    return null;
-                }
+                return goTService.getCharacter(params[0]);
             }
 
             @Override
@@ -141,7 +143,7 @@ public class GoTOnlineAdapter extends BaseAdapter {
                 page++;
                 notifyDataSetChanged();
             }
-        }.execute(page);
+        }.execute(page + 1);
     }
 
     public static class ViewHolder {
