@@ -2,12 +2,14 @@ package co.creativev.gotapp;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -100,11 +102,20 @@ public class GoTOnlineAdapter extends BaseAdapter {
         new AsyncTask<Integer, Void, List<GoTCharacter>>() {
             @Override
             protected List<GoTCharacter> doInBackground(Integer... params) {
-                return goTService.getCharacters(params[0]);
+                try {
+                    return goTService.getCharacters(params[0]);
+                } catch (Exception e) {
+                    Log.e(GoTApplication.LOG_TAG, "Error while fetching data", e);
+                    return null;
+                }
             }
 
             @Override
             protected void onPostExecute(List<GoTCharacter> goTCharacter) {
+                if (goTCharacter == null) {
+                    Toast.makeText(context, "Failed to fetch data", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 characters.addAll(goTCharacter);
                 page++;
                 notifyDataSetChanged();
