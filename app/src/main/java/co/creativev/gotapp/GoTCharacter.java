@@ -38,6 +38,11 @@ public class GoTCharacter implements Parcelable, BaseColumns {
         this.description = description;
     }
 
+
+    public String lifeStatus() {
+        return alive ? "Will Die" : "Already Dead";
+    }
+
     @Override
     public int describeContents() {
         return 0;
