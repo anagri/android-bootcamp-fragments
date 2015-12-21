@@ -27,13 +27,13 @@ public class DetailFragment extends Fragment {
 
         characterName.setText(character.name);
         description.setText(character.description);
-        houseName.setText(character.house);
+        houseName.setText(character.getHouse(getContext()));
         Picasso.with(getContext())
                 .load(character.fullUrl)
                 .placeholder(R.drawable.profile_placeholder_full)
                 .error(R.drawable.profile_placeholder_error_full)
                 .into(characterImage);
-        houseThumb.setImageResource(character.houseResId);
+        houseThumb.setImageResource(character.getHouseImageRes());
         return view;
     }
 }

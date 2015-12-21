@@ -38,8 +38,7 @@ public class GotAdapter extends BaseAdapter {
                 cursor.getString(cursor.getColumnIndexOrThrow(GoTCharacter.THUMB_URL)),
                 cursor.getString(cursor.getColumnIndexOrThrow(GoTCharacter.FULL_URL)),
                 true,
-                cursor.getString(cursor.getColumnIndexOrThrow(GoTCharacter.HOUSE)),
-                cursor.getInt(cursor.getColumnIndexOrThrow(GoTCharacter.HOUSE_RES_ID)),
+                cursor.getInt(cursor.getColumnIndexOrThrow(GoTCharacter.HOUSE_ID)),
                 cursor.getString(cursor.getColumnIndexOrThrow(GoTCharacter.DESCRIPTION)));
     }
 

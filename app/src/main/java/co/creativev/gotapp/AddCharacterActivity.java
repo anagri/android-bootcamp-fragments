@@ -89,7 +89,7 @@ public class AddCharacterActivity extends AppCompatActivity {
                 int houseResId = getHouseResId(selectedHouse);
                 String houseName = getHouseName(selectedHouse);
                 DatabaseHelper databaseHelper = DatabaseHelper.getInstance(AddCharacterActivity.this);
-                final GoTCharacter goTCharacter = new GoTCharacter(name, imagePath, imagePath, true, houseName, houseResId, "Created by Add Activity");
+                final GoTCharacter goTCharacter = new GoTCharacter(name, imagePath, imagePath, true, houseResId, "Created by Add Activity");
 
 //                long id = databaseHelper.insert(goTCharacter);
                 final GoTService goTService = ((GoTApplication) getApplication()).getGoTService();

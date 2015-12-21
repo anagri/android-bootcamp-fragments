@@ -47,7 +47,7 @@ public class GoTApplication extends Application {
 
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setClient(new OkClient(okHttpClient))
-                .setEndpoint("http://10.10.0.59:3000/")
+                .setEndpoint("http://192.168.1.31:3000/")
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .setConverter(new GsonConverter(gson))
                 .build();
