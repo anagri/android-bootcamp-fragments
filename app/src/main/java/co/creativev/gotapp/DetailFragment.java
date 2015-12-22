@@ -42,9 +42,9 @@ public class DetailFragment extends Fragment {
                 .error(R.drawable.profile_placeholder_error_full)
                 .into(characterImage);
         if (character.alive)
-            characterName.setTextColor(getResources().getColor(android.R.color.black));
+            characterName.setTextColor(getResources().getColor(R.color.color_alive));
         else
-            characterName.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
+            characterName.setTextColor(getResources().getColor(R.color.color_dead));
         houseThumb.setImageResource(getHouseResId(character.houseId));
         return view;
     }
