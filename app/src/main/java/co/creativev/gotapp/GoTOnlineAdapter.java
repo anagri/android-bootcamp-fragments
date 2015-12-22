@@ -1,5 +1,6 @@
 package co.creativev.gotapp;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -99,6 +100,7 @@ public class GoTOnlineAdapter extends BaseAdapter {
     }
 
     public void loadMore() {
+        final ProgressDialog dialog = ProgressDialog.show(context, null, "Loading", true);
         new AsyncTask<Integer, Void, List<GoTCharacter>>() {
             @Override
             protected List<GoTCharacter> doInBackground(Integer... params) {
@@ -112,6 +114,7 @@ public class GoTOnlineAdapter extends BaseAdapter {
 
             @Override
             protected void onPostExecute(List<GoTCharacter> goTCharacter) {
+                dialog.dismiss();
                 if (goTCharacter == null) {
                     Toast.makeText(context, "Failed to fetch data", Toast.LENGTH_SHORT).show();
                     return;

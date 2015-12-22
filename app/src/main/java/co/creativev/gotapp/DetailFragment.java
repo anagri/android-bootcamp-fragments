@@ -11,6 +11,14 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import static co.creativev.gotapp.GoTCharacter.BARATHEON;
+import static co.creativev.gotapp.GoTCharacter.BOLTON;
+import static co.creativev.gotapp.GoTCharacter.DOTHRAKI;
+import static co.creativev.gotapp.GoTCharacter.FACELESS_MEN;
+import static co.creativev.gotapp.GoTCharacter.LANNISTER;
+import static co.creativev.gotapp.GoTCharacter.STARK;
+import static co.creativev.gotapp.GoTCharacter.TARGARYEN;
+
 public class DetailFragment extends Fragment {
     @Nullable
     @Override
@@ -27,13 +35,59 @@ public class DetailFragment extends Fragment {
 
         characterName.setText(character.name);
         description.setText(character.description);
-        houseName.setText(character.getHouse(getContext()));
+        houseName.setText(getHouseNameResId(character.houseId));
         Picasso.with(getContext())
                 .load(character.fullUrl)
                 .placeholder(R.drawable.profile_placeholder_full)
                 .error(R.drawable.profile_placeholder_error_full)
                 .into(characterImage);
-        houseThumb.setImageResource(character.getHouseImageRes());
+        if (character.alive)
+            characterName.setTextColor(getResources().getColor(android.R.color.black));
+        else
+            characterName.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
+        houseThumb.setImageResource(getHouseResId(character.houseId));
         return view;
+    }
+
+    private int getHouseNameResId(int houseId) {
+        switch (houseId) {
+            case STARK:
+                return R.string.stark;
+            case LANNISTER:
+                return R.string.lannister;
+            case BARATHEON:
+                return R.string.baratheon;
+            case TARGARYEN:
+                return R.string.targaryen;
+            case BOLTON:
+                return R.string.bolton;
+            case DOTHRAKI:
+                return R.string.dothraki;
+            case FACELESS_MEN:
+                return R.string.faceless_men;
+            default:
+                return R.string.unknown_house;
+        }
+    }
+
+    private int getHouseResId(int houseId) {
+        switch (houseId) {
+            case STARK:
+                return R.drawable.stark;
+            case LANNISTER:
+                return R.drawable.lannister;
+            case BARATHEON:
+                return R.drawable.baratheon;
+            case TARGARYEN:
+                return R.drawable.targaryen;
+            case BOLTON:
+                return R.drawable.bolton;
+            case DOTHRAKI:
+                return R.drawable.dothraki;
+            case FACELESS_MEN:
+                return R.drawable.faceless;
+            default:
+                return R.drawable.house_placeholder;
+        }
     }
 }

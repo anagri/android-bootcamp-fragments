@@ -49,48 +49,6 @@ public class GoTCharacter implements Parcelable, BaseColumns {
         return alive ? "Will Die" : "Already Dead";
     }
 
-    public String getHouse(Context context) {
-        switch (houseId) {
-            case STARK:
-                return context.getString(R.string.stark);
-            case LANNISTER:
-                return context.getString(R.string.lannister);
-            case BARATHEON:
-                return context.getString(R.string.baratheon);
-            case TARGARYEN:
-                return context.getString(R.string.targaryen);
-            case BOLTON:
-                return context.getString(R.string.bolton);
-            case DOTHRAKI:
-                return context.getString(R.string.dothraki);
-            case FACELESS_MEN:
-                return context.getString(R.string.faceless_men);
-            default:
-                return context.getString(R.string.unknown_house);
-        }
-    }
-
-    public int getHouseImageRes() {
-        switch (houseId) {
-            case STARK:
-                return R.drawable.stark;
-            case LANNISTER:
-                return R.drawable.lannister;
-            case BARATHEON:
-                return R.drawable.baratheon;
-            case TARGARYEN:
-                return R.drawable.targaryen;
-            case BOLTON:
-                return R.drawable.bolton;
-            case DOTHRAKI:
-                return R.drawable.dothraki;
-            case FACELESS_MEN:
-                return R.drawable.faceless;
-            default:
-                return R.drawable.house_placeholder;
-        }
-    }
-
     @Override
     public int describeContents() {
         return 0;
